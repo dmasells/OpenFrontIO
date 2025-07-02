@@ -291,6 +291,9 @@ export class PlayerPanel extends LitElement implements Layer {
                     translate="no"
                   >
                     ${renderTroops(other.troops() || 0)}
+                    ${other.isOnSameTeam(myPlayer)
+                      ? " / " + renderTroops(this.g.config().maxTroops(other))
+                      : ""}
                   </div>
                 </div>
               </div>
