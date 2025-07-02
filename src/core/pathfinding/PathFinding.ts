@@ -25,14 +25,18 @@ export class ParabolaPathFinder {
     const maxHeight = distanceBasedHeight
       ? Math.max(distance / 3, parabolaMinHeight)
       : 0;
-    // Use a bezier curve always pointing up
+
+    // Determine the arc bias based on vertical direction
+    const isAscending = p0.y < p3.y;
+    const apexBias = isAscending ? 0.3 : 0.5; // Bias toward origin when ascending
+
     const p1 = {
-      x: p0.x + (p3.x - p0.x) / 4,
-      y: Math.max(p0.y + (p3.y - p0.y) / 4 - maxHeight, 0),
+      x: p0.x + dx * apexBias * 0.5,
+      y: Math.max(p0.y + dy * apexBias * 0.5 - maxHeight, 0),
     };
     const p2 = {
-      x: p0.x + ((p3.x - p0.x) * 3) / 4,
-      y: Math.max(p0.y + ((p3.y - p0.y) * 3) / 4 - maxHeight, 0),
+      x: p0.x + dx * (1 - apexBias * 0.5),
+      y: Math.max(p0.y + dy * (1 - apexBias * 0.5) - maxHeight * 0.5, 0),
     };
 
     this.curve = new DistanceBasedBezierCurve(p0, p1, p2, p3);
