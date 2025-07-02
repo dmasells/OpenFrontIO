@@ -109,6 +109,7 @@ export interface Config {
   // are twice more likely to be selected. X is determined below.
   proximityBonusPortsNb(totalPorts: number): number;
   maxPopulation(player: Player | PlayerView): number;
+  maxTroops(player: Player | PlayerView): number;
   cityPopulationIncrease(): number;
   boatAttackAmount(attacker: Player, defender: Player | TerraNullius): number;
   shellLifetime(): number;

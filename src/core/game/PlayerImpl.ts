@@ -550,18 +550,24 @@ export class PlayerImpl implements Player {
 
   donateTroops(recipient: Player, troops: number): boolean {
     if (troops <= 0) return false;
-    const removed = this.removeTroops(troops);
+
+    const maxReceivableTroops =
+      this.mg.config().maxTroops(recipient) - recipient.troops();
+    if (maxReceivableTroops <= 0) return false;
+
+    const removed = this.removeTroops(Math.min(troops, maxReceivableTroops));
     if (removed === 0) return false;
+
     recipient.addTroops(removed);
 
     this.sentDonations.push(new Donation(recipient, this.mg.ticks()));
     this.mg.displayMessage(
-      `Sent ${renderTroops(troops)} troops to ${recipient.name()}`,
+      `Sent ${renderTroops(removed)} troops to ${recipient.name()}`,
       MessageType.INFO,
       this.id(),
     );
     this.mg.displayMessage(
-      `Received ${renderTroops(troops)} troops from ${this.name()}`,
+      `Received ${renderTroops(removed)} troops from ${this.name()}`,
       MessageType.SUCCESS,
       recipient.id(),
     );

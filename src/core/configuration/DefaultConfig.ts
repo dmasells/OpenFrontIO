@@ -667,6 +667,10 @@ export class DefaultConfig implements Config {
     }
   }
 
+  maxTroops(player: Player | PlayerView): number {
+    return this.maxPopulation(player) * player.targetTroopRatio();
+  }
+
   populationIncreaseRate(player: Player): number {
     const max = this.maxPopulation(player);
 
